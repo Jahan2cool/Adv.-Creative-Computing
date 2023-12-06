@@ -12,6 +12,8 @@ FPS = 30
 font = pygame.font.Font(None, 50)
 smallfont = pygame.font.Font(None, 35)
 
+originpoints = [width/2, height/2]
+
 black = (0, 0, 0)
 Mooncolor = (148, 148, 148)
 red = (255, 0, 0)
@@ -29,8 +31,24 @@ num = int(1)
 
 phase = "p1"
 
+class Earth:
+  def __init__(self):
+    self.mass = 6479
+    self.vectors = np.array([0.0,0.0])
+    self.vertices = np.array([-300 , -300])
+    self.color = (0,255,200)
+    self.radius = 15
+
+class Moon:
+  def __init__(self):
+    self.mass = 50000
+    self.vectors = np.array([0.0 , 0.0])
+    self.vertices = np.array([0,0])
+    self.color = (105,105,105)
+    self.radius = 80  
+
 class rocketclass:
-    def __init__(this,vertices: list,vectors: list,color: tuple,mass: int,maxthrust: float,fuel: int,radius=20,angle=-math.pi / 2,angleVect=0,):
+    def __init__(this,vertices: list,vectors: list,color: tuple,mass: int,maxthrust: float,fuel: int,radius=20,angle=-math.pi / 2,angleVect=0,planetvectors = [0.0,0.0]):
         this.vertices = vertices
         this.vectors = vectors
         this.mass = mass
@@ -41,6 +59,7 @@ class rocketclass:
         this.angle = angle
         this.angleVect = angleVect
         this.mass = mass
+        this.planetvectors = planetvectors
 
     def fuelcheck(this, keys: dict) -> dict:
         booleans = {"thrust": False, "left": False, "right": False}
@@ -49,7 +68,7 @@ class rocketclass:
             if fuelthing[0] and this.fuel > 0:
                 booleans[fuelthing[1]] = True
                 this.fuel -= 75 * float(fuelthing[2])
-                this.mass -= 10 * float(fuelthing[2])
+                #this.mass -= 10 * float(fuelthing[2])
         return {"thrust": booleans["thrust"],"left": booleans["left"],"right": booleans["right"]}
 
     def getPoints(this, triangle: list) -> list:
@@ -65,18 +84,51 @@ class rocketclass:
         this.vertices += this.vectors
 
     def draw(this, pressed: dict):
-        if pressed["thrust"]: pygame.draw.polygon(screen,red,this.getPoints([[(5 * math.pi / 6), 0.8 * this.radius],[(7 * math.pi / 6), 0.8 * this.radius],[math.pi, 1.5 * this.radius],])+ this.vertices,)
-        pygame.draw.polygon(screen,this.color,this.getPoints([[0, this.radius],[(3 * math.pi / 4), this.radius],[(5 * math.pi / 4), this.radius],]) + this.vertices,)
-class planet:
-    def __init__(self):
-        pass
+        if pressed["thrust"]:
+            flamePoints = this.getPoints([[(5 * math.pi / 6), 0.8 * this.radius],[(7 * math.pi / 6), 0.8 * this.radius],[math.pi, 1.5 * this.radius],])+ this.vertices + originpoints
+            pygame.draw.polygon(screen,red,flamePoints)
+            
+        rocketPoints = this.getPoints([[0, this.radius],[(3 * math.pi / 4), this.radius],[(5 * math.pi / 4), this.radius],]) + this.vertices + originpoints
+        pygame.draw.polygon(screen,this.color,rocketPoints)
+
+class p1class:
+    def __init__(this):
+        this.rocket: rocketclass = rocketclass(np.array([-200.0, -300.0]), np.array([5.0, 0.0]), (255, 255, 255), 6479, 1000, 10000)
+        this.moon = Moon()
+        this.earth = Earth() 
+
+    def update(this, planets):
+        for i in planets:
+            for j in planets:
+                if i != j:
+                    r = math.sqrt(abs((i.vertices[0] - j.vertices[0]) ** 2 + (i.vertices[1] - j.vertices[1]) ** 2))
+                    force = (6.67e-11 * i.mass * j.mass) / r ** 2
+                    angle = math.atan2((i.vertices[1] - j.vertices[1]),(i.vertices[0] - j.vertices[0]))
+                    if j != p1.rocket:
+                        j.vectors[0] += ((math.cos(angle)*force)/j.mass) * 58800
+                        j.vectors[1] += ((math.sin(angle)*force)/j.mass) * 58800
+                    else:
+                        j.planetvectors[0] += ((math.cos(angle)*force)/j.mass) * 58800
+                        j.planetvectors[1] += ((math.sin(angle)*force)/j.mass) * 58800
+            if i != p1.rocket:
+                i.vertices[0] = i.vertices[0] + i.vectors[0] * 58800
+                i.vertices[1] = i.vertices[1] + i.vectors[1] * 58800
+            else:
+                i.vertices[0] = i.vertices[0] + i.planetvectors[0] * 58800
+                i.vertices[1] = i.vertices[1] + i.planetvectors[1] * 58800
+        this.moon.vertices = np.array([0,0])
+        
+    def draw(this, screen, planets):
+        for i in planets:
+            if i!= p1.rocket:
+                pygame.draw.circle(screen, i.color , ((i.vertices[0]) + width/2 , (i.vertices[1]) + height/2), i.radius)
 
 class landerclass:
     def __init__(this):
         this.top = halfLanderClass(np.array([(485.0, 50.0),(515.0, 50.0),(535.0, 65.0),(535.0, 95.0),(515.0, 110.0),(485.0, 110.0),(465.0, 95.0),(465.0, 65.0),]),emptyVectors.copy(),topcolor,2445,15000,8376)
         this.bottom = halfLanderClass(np.array([(485.0, 110.0),(515.0, 110.0),(550.0, 135.0),(540.0, 135.0),(505.0, 115.0),(495.0, 115.0),(460.0, 135.0),(450.0, 135.0)]),emptyVectors.copy(),bottomColor,2034,45000,8248,)
 
-    def update(this, split: bool, thrustvalue: float, crash: bool, pressed: dict) -> tuple:
+    def update(this, split: bool, thrustvalue: float, crash: bool, pressed: dict) -> tuple[bool, bool, int, int]:
         totalmass = this.top.mass + this.bottom.mass if not split else this.top.mass
         finalthrust = thrustvalue * 4000 / totalmass if not split else thrustvalue * 2500 / totalmass
         objlist = [this.top] if split else [this.bottom, this.top]
@@ -157,11 +209,16 @@ class halfLanderClass:
                 this.mass -= 10 * float(fuelthing[2])
         return {"thrust": booleans["thrust"],"left": booleans["left"], "right": booleans["right"],}
 
-rocket: rocketclass = rocketclass(np.array([400.0, 400.0]), np.array([0.0, 0.0]), (255, 255, 255), 6479, 1000, 10000)
+def getDistance(obj1, obj2):
+    return math.dist(obj1.vertices, obj2.vertices)
+
+p1: p1class = p1class()
 
 lander: landerclass = landerclass()
-lander.top.vectors += 3
-lander.bottom.vectors += 3
+
+planets = [p1.moon, p1.rocket]
+#planets = [p1.moon, p1.earth, p1.rocket]
+
 
 while run:
     clock.tick(FPS)
@@ -172,9 +229,19 @@ while run:
     keys = pygame.key.get_pressed()
 
     if phase == "p1":
-        pressed = rocket.fuelcheck(keys)
-        rocket.update(pressed)
-        rocket.draw(pressed)
+        pressed = p1.rocket.fuelcheck(keys)
+        p1.rocket.update(pressed)
+        p1.rocket.draw(pressed)
+        p1.update(planets)
+        p1.draw(screen, planets)
+        if getDistance(p1.moon, p1.rocket) <= 100:
+            for obj in [lander.top,lander.bottom]:
+                for i in range(8):
+                    obj.vectors[i][0]+= p1.rocket.planetvectors[0] * 40000 #x value
+                    obj.vectors[i][1]+= p1.rocket.vectors[1]+p1.rocket.planetvectors[1] * 70000  #y value
+            phase = 'p2'
+                    
+
 
     elif phase == "p2":
         if crash == False:

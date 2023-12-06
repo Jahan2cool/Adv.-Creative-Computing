@@ -44,11 +44,24 @@ class Sun:
     self.color = (255,255,204)
     self.radius = 80
 
+
+
+class rocketPlanet:
+  def __init__(self):
+    self.mass = 1.99e23
+    self.distance = 1.49e11
+    self.name = 'rocketplanet'
+    self.vectors = np.array([0,0])
+    self.vertices = np.array([-2.37e11 , 1.49e11])
+    self.color = (255,255,255)
+    self.radius = 15
+
 mars = Mars()
 sun = Sun()
 earth = Earth()
+rocketplanet = rocketPlanet()
 
-planets = [sun, earth,mars]
+planets = [sun, earth,mars, rocketplanet]
 
 def updatevectors(planets):
     for i in planets:
