@@ -43,131 +43,131 @@ phase = "p2"
 
 class rocketclass:
     def __init__(
-        self,
-        vertices,
-        vectors,
-        color,
-        mass,
-        maxthrust,
-        fuel,
+        this,
+        vertices: list,
+        vectors: list,
+        color: tuple,
+        mass: int,
+        maxthrust: float,
+        fuel: int,
         radius=20,
         angle=-math.pi / 2,
         angleVect=0,
     ):
-        self.vertices = vertices
-        self.vectors = vectors
-        self.mass = mass
-        self.color = color
-        self.maxthrust = maxthrust
-        self.fuel = fuel
-        self.radius = radius
-        self.angle = angle
-        self.angleVect = angleVect
-        self.mass = mass
-
-    def fuelcheck(self, keys):
+        this.vertices = vertices
+        this.vectors = vectors
+        this.mass = mass
+        this.color = color
+        this.maxthrust = maxthrust
+        this.fuel = fuel
+        this.radius = radius
+        this.angle = angle
+        this.angleVect = angleVect
+        this.mass = mass
+    def fuelcheck(this, keys: dict):
+        
         booleans = {"thrust": False, "left": False, "right": False}
-        if self.fuel < 0:
-            self.fuel = 0
+        if this.fuel < 0:
+            this.fuel = 0
         for fuelthing in [
             (keys[pygame.K_w], "thrust", 1),
             (keys[pygame.K_a], "left", 1 / 2),
             (keys[pygame.K_d], "right", 1 / 2),
         ]:
-            if fuelthing[0] and self.fuel > 0:
+            if fuelthing[0] and this.fuel > 0:
                 booleans[fuelthing[1]] = True
-                self.fuel -= 75 * float(fuelthing[2])
-                self.mass -= 10 * float(fuelthing[2])
+                this.fuel -= 75 * float(fuelthing[2])
+                this.mass -= 10 * float(fuelthing[2])
         return {
             "thrust": booleans["thrust"],
             "left": booleans["left"],
             "right": booleans["right"],
         }
 
-    def getPoints(self, triangle):
+    def getPoints(this, triangle: list):    
         return np.array(
             [
-                (rad * math.cos(t + self.angle), rad * math.sin(t + self.angle))
+                (rad * math.cos(t + this.angle), rad * math.sin(t + this.angle))
                 for [t, rad] in triangle
             ]
         )
 
-    def update(self, pressed):
+    def update(this, pressed: dict):
         for key in [(pressed["left"], -0.01), (pressed["right"], 0.01)]:
             if key[0]:
-                self.angleVect += key[1] * movementScale
+                this.angleVect += key[1] * movementScale
         if pressed["thrust"]:
-            self.vectors[0] += movementScale * math.cos(self.angle)
-            self.vectors[1] += movementScale * math.sin(self.angle)
-        self.angle += self.angleVect
-        self.vertices += self.vectors
+            this.vectors[0] += movementScale * math.cos(this.angle)
+            this.vectors[1] += movementScale * math.sin(this.angle)
+        this.angle += this.angleVect
+        this.vertices += this.vectors
 
-    def draw(self, pressed):
+    def draw(this, pressed: dict):
         if pressed["thrust"]:
             pygame.draw.polygon(
                 screen,
                 red,
-                self.getPoints(
+                this.getPoints(
                     [
-                        [(5 * math.pi / 6), 0.8 * self.radius],
-                        [(7 * math.pi / 6), 0.8 * self.radius],
-                        [math.pi, 1.5 * self.radius],
+                        [(5 * math.pi / 6), 0.8 * this.radius],
+                        [(7 * math.pi / 6), 0.8 * this.radius],
+                        [math.pi, 1.5 * this.radius],
                     ]
                 )
-                + self.vertices,
+                + this.vertices,
             )
         pygame.draw.polygon(
             screen,
-            self.color,
-            self.getPoints(
+            this.color,
+            this.getPoints(
                 [
-                    [0, self.radius],
-                    [(3 * math.pi / 4), self.radius],
-                    [(5 * math.pi / 4), self.radius],
+                    [0, this.radius],
+                    [(3 * math.pi / 4), this.radius],
+                    [(5 * math.pi / 4), this.radius],
                 ]
             )
-            + self.vertices,
+            + this.vertices,
         )
 
 
 class lander:
     def __init__(
-        self,
-        vertices,
-        vectors,
-        color,
-        mass,
-        maxthrust,
-        fuel,
+        this,
+        vertices: list,
+        vectors: list,
+        color: tuple,
+        mass: int,
+        maxthrust: float,
+        fuel: int,
         radius=20,
         angle=-math.pi / 2,
         angleVect=0,
     ):
-        self.vertices = vertices
-        self.vectors = vectors
-        self.mass = mass
-        self.color = color
-        self.maxthrust = maxthrust
-        self.fuel = fuel
-        self.radius = radius
-        self.angle = angle
-        self.angleVect = angleVect
-        self.mass = mass
+        this.vertices = vertices
+        this.vectors = vectors
+        this.mass = mass
+        this.color = color
+        this.maxthrust = maxthrust
+        this.fuel = fuel
+        this.radius = radius
+        this.angle = angle
+        this.angleVect = angleVect
+        this.mass = mass
 
-    def fuelcheck(self, keys):
+    def fuelcheck(this, keys: dict):  
         booleans = {"thrust": False, "left": False, "right": False}
-        if self.fuel < 0:
-            self.fuel = 0
+        if this.fuel < 0:
+            this.fuel = 0
 
         for fuelthing in [
             (keys[pygame.K_w], "thrust", 1),
             (keys[pygame.K_a], "left", 1 / 2),
             (keys[pygame.K_d], "right", 1 / 2),
         ]:
-            if fuelthing[0] and self.fuel > 0:
+            if fuelthing[0] and this.fuel > 0:
                 booleans[fuelthing[1]] = True
-                self.fuel -= 75 * float(fuelthing[2])
-                self.mass -= 10 * float(fuelthing[2])
+                this.fuel -= 75 * float(fuelthing[2])
+                this.mass -= 10 * float(fuelthing[2])
         return {
             "thrust": booleans["thrust"],
             "left": booleans["left"],
@@ -220,7 +220,7 @@ top.vectors += 3
 bottom.vectors += 3
 
 
-def updateVect(top, bottom, split, thrustvalue, crash, pressed):
+def updateVect(top, bottom, split: bool, thrustvalue: float, crash: bool, pressed: dict):
     totalmass = top.mass + bottom.mass if not split else top.mass
     finalthrust = (
         thrustvalue * 4000 / totalmass if not split else thrustvalue * 2500 / totalmass
@@ -257,7 +257,7 @@ def updateVect(top, bottom, split, thrustvalue, crash, pressed):
     return split, crash, downforce, sideforce
 
 
-def drawall(top, bottom, split, pressed):
+def drawall(top, bottom, split: bool, pressed: dict):
     pygame.draw.rect(screen, Mooncolor, pygame.Rect(0, 760, 800, 800))
     if pressed["thrust"]:
         pygame.draw.polygon(
@@ -273,17 +273,7 @@ def drawall(top, bottom, split, pressed):
         )
     for x in [(pressed["left"], 2, 3, 1), (pressed["right"], 7, 6, -1)]:
         if x[0]:
-            pygame.draw.polygon(
-                screen,
-                (255, 0, 0),
-                (
-                    [
-                        (top.vertices[x[1]][0], top.vertices[x[1]][1] + 10),
-                        (top.vertices[x[2]][0], top.vertices[x[2]][1] - 10),
-                        (top.vertices[x[1]][0] + 10 * x[3], top.vertices[x[1]][1] + 15),
-                    ]
-                ),
-            )
+            pygame.draw.polygon(screen,(255, 0, 0),([(top.vertices[x[1]][0], top.vertices[x[1]][1] + 10),(top.vertices[x[2]][0], top.vertices[x[2]][1] - 10),(top.vertices[x[1]][0] + 10 * x[3], top.vertices[x[1]][1] + 15),]))
 
     for obj in [bottom, top]:
         pygame.draw.polygon(screen, obj.color, (obj.vertices))
@@ -293,7 +283,7 @@ def drawall(top, bottom, split, pressed):
     screen.blit(Text, (20, 20))
 
 
-def drawaftercrash(num, downforce, sideforce):
+def drawaftercrash(num: int, downforce: float, sideforce: float):
     screen.fill(black)
     # draw land with a hole
     pygame.draw.rect(screen, Mooncolor, pygame.Rect(0, 760, 800, 800))
@@ -386,5 +376,4 @@ while run:
 
         else:
             num = drawaftercrash(num, downforce, sideforce)
-
     pygame.display.update()
