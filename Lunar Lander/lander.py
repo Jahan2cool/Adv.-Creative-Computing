@@ -183,7 +183,7 @@ class landerclass:
         screen.blit(Text, (20, 20))
 
         return num
-
+\
 class halfLanderClass:
     def __init__(this,vertices: list,vectors: list,color: tuple,mass: int,maxthrust: float,fuel: int,radius=20,angle=-math.pi / 2,angleVect=0,):
         this.vertices = vertices
@@ -234,6 +234,8 @@ while run:
         p1.rocket.draw(pressed)
         p1.update(planets)
         p1.draw(screen, planets)
+        
+        #MAKE IT TRACK ANGLE  AND OFFSET IN RELATION TO THE PLANET
         if getDistance(p1.moon, p1.rocket) <= 100:
             for obj in [lander.top,lander.bottom]:
                 for i in range(8):
