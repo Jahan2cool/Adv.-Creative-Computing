@@ -68,9 +68,9 @@ class rocketclass:
         if pressed["thrust"]: pygame.draw.polygon(screen,red,this.getPoints([[(5 * math.pi / 6), 0.8 * this.radius],[(7 * math.pi / 6), 0.8 * this.radius],[math.pi, 1.5 * this.radius],])+ this.vertices,)
         pygame.draw.polygon(screen,this.color,this.getPoints([[0, this.radius],[(3 * math.pi / 4), this.radius],[(5 * math.pi / 4), this.radius],]) + this.vertices,)
 
-class planet:
-    def __init__(self):
-        pass
+class p1class:
+    def __init__(this):
+        this.rocket = rocketclass(np.array([400.0, 400.0]), np.array([0.0, 0.0]), (255, 255, 255), 6479, 1000, 10000)
 
 class landerclass:
     def __init__(this):
@@ -158,7 +158,8 @@ class halfLanderClass:
                 this.mass -= 10 * float(fuelthing[2])
         return {"thrust": booleans["thrust"],"left": booleans["left"], "right": booleans["right"],}
 
-rocket: rocketclass = rocketclass(np.array([400.0, 400.0]), np.array([0.0, 0.0]), (255, 255, 255), 6479, 1000, 10000)
+
+p1: p1class = p1class()
 
 lander: landerclass = landerclass()
 lander.top.vectors += 3
@@ -173,9 +174,9 @@ while run:
     keys = pygame.key.get_pressed()
 
     if phase == "p1":
-        pressed = rocket.fuelcheck(keys)
-        rocket.update(pressed)
-        rocket.draw(pressed)
+        pressed = p1.rocket.fuelcheck(keys)
+        p1.rocket.update(pressed)
+        p1.rocket.draw(pressed)
 
     elif phase == "p2":
         if crash == False:

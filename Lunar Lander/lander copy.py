@@ -67,7 +67,6 @@ class rocketclass:
     def draw(this, pressed: dict):
         if pressed["thrust"]: pygame.draw.polygon(screen,red,this.getPoints([[(5 * math.pi / 6), 0.8 * this.radius],[(7 * math.pi / 6), 0.8 * this.radius],[math.pi, 1.5 * this.radius],])+ this.vertices,)
         pygame.draw.polygon(screen,this.color,this.getPoints([[0, this.radius],[(3 * math.pi / 4), this.radius],[(5 * math.pi / 4), this.radius],]) + this.vertices,)
-
 class planet:
     def __init__(self):
         pass
