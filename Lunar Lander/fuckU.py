@@ -52,7 +52,7 @@ class landerclass:
         elif split: this.top.vertices += this.top.vectors
         return (split, crash, downforce, sideforce)
     def draw(this, split: bool, pressed: dict):
-        pygame.draw.rect(screen, (148, 148, 148), pygame.Rect(0, 760, 800, 800))
+        pygame.draw.rect(screen, (148, 148, 148), pygame.Rect(0, 760, 2000, 800))
         if pressed["thrust"]: pygame.draw.polygon(screen,(255, 0, 0),([(this.top.vertices[1][0], this.top.vertices[1][1] + 55),(this.top.vertices[1][0] - 30, this.top.vertices[1][1] + 55),(this.top.vertices[1][0] - 15, this.top.vertices[1][1] + 100)]))
         for x in [(pressed["left"], 2, 3, 1), (pressed["right"], 7, 6, -1)]:
             if x[0]: pygame.draw.polygon(screen,(255, 0, 0),([(this.top.vertices[x[1]][0], this.top.vertices[x[1]][1] + 10),(this.top.vertices[x[2]][0], this.top.vertices[x[2]][1] - 10),(this.top.vertices[x[1]][0] + 10 * x[3], this.top.vertices[x[1]][1] + 15),]))
@@ -80,7 +80,7 @@ class halfLanderClass:
             if fuelthing[0] and this.fuel > 0: booleans[fuelthing[1]] = True; this.fuel -= 75 * float(fuelthing[2]); this.mass -= 10 * float(fuelthing[2])
         return {"thrust": booleans["thrust"],"left": booleans["left"], "right": booleans["right"],}
 def getDistance(obj1, obj2): return math.dist(obj1.vertices, obj2.vertices)
-width = 800; height = 800; run = True; FPS = 30; num = int(1); emptyVectors = np.array([(0.0, 0.0),(0.0, 0.0),(0.0, 0.0),(0.0, 0.0),(0.0, 0.0),(0.0, 0.0),(0.0, 0.0),(0.0, 0.0)]); phase = "p1"; originpoints = [width/2, height/2]; split, crash, wreset = False, False, False; p1: p1class = p1class(); lander: landerclass = landerclass(); pygame.init(); screen = pygame.display.set_mode((width, height)); pygame.display.set_caption("Lunar Lander"); font = pygame.font.Font(None, 50); smallfont = pygame.font.Font(None, 35); planets = [p1.moon, p1.rocket]
+width = 1500; height = 800; run = True; FPS = 30; num = int(1); emptyVectors = np.array([(0.0, 0.0),(0.0, 0.0),(0.0, 0.0),(0.0, 0.0),(0.0, 0.0),(0.0, 0.0),(0.0, 0.0),(0.0, 0.0)]); phase = "p1"; originpoints = [width/2, height/2]; split, crash, wreset = False, False, False; p1: p1class = p1class(); lander: landerclass = landerclass(); pygame.init(); screen = pygame.display.set_mode((width, height)); pygame.display.set_caption("Lunar Lander"); font = pygame.font.Font(None, 50); smallfont = pygame.font.Font(None, 35); planets = [p1.moon, p1.rocket]
 while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE): run = False

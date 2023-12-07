@@ -233,7 +233,7 @@ class landerclass:
         return (split, crash, downforce, sideforce)
 
     def draw(this, split: bool, pressed: dict):
-        pygame.draw.rect(screen, (148, 148, 148), pygame.Rect(0, 760, 800, 800))
+        pygame.draw.rect(screen, (148, 148, 148), pygame.Rect(0, 760, 1500, 800))
         if pressed["thrust"]:
             pygame.draw.polygon(
                 screen,
@@ -361,7 +361,7 @@ def getDistance(obj1, obj2):
     return math.dist(obj1.vertices, obj2.vertices)
 
 
-width = 800
+width = 1500
 height = 800
 run = True
 FPS = 30
