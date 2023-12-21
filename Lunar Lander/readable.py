@@ -1,5 +1,3 @@
-# ADD SPACE CONTROLS TOO AND RESET
-
 import numpy as np
 import pygame
 import math
@@ -41,7 +39,7 @@ class rocketclass:
         this.planetvectors = planetvectors
 
     def fuelcheck(this, keys: dict) -> dict:
-        booleans: dict = {"thrust": False, "left": False, "right": False}
+        booleans = {"thrust": False, "left": False, "right": False}
         if this.fuel < 0:
             this.fuel = 0
         for fuelthing in [
@@ -202,7 +200,6 @@ class landerclass:
         objlist = [this.top] if split else [this.bottom, this.top]
         downforce = this.bottom.vectors[5][1] * totalmass
         sideforce = this.bottom.vectors[5][0] * totalmass
-
         for i in range(8):
             for key in [
                 (pressed["thrust"], 1, 1),
@@ -217,7 +214,6 @@ class landerclass:
                 if key[0]:
                     for obj in objlist:
                         obj.vectors[i][key[1]] -= finalthrust * key[2]
-
         if not split:
             if this.top.vertices[7][1] < 685:
                 for obj in objlist:
@@ -233,7 +229,7 @@ class landerclass:
         return (split, crash, downforce, sideforce)
 
     def draw(this, split: bool, pressed: dict):
-        pygame.draw.rect(screen, (148, 148, 148), pygame.Rect(0, 760, 1500, 800))
+        pygame.draw.rect(screen, (148, 148, 148), pygame.Rect(0, 760, 2000, 800))
         if pressed["thrust"]:
             pygame.draw.polygon(
                 screen,
@@ -275,7 +271,7 @@ class landerclass:
         screen.blit(Text, (20, 20))
 
     def drawaftercrash(this, num: int, downforce: float, sideforce: float) -> int:
-        pygame.draw.rect(screen, (148, 148, 148), pygame.Rect(0, 760, 800, 800))
+        pygame.draw.rect(screen, (148, 148, 148), pygame.Rect(0, 760, 2000, 800))
         pygame.draw.circle(screen, (0, 0, 0), (this.top.vertices[1][0] - 15, 500), 290)
         if num < 200:
             num += 10
@@ -389,7 +385,6 @@ pygame.display.set_caption("Lunar Lander")
 font = pygame.font.Font(None, 50)
 smallfont = pygame.font.Font(None, 35)
 planets = [p1.moon, p1.rocket]
-
 while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT or (

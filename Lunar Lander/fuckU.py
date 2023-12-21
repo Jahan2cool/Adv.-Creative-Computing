@@ -59,7 +59,7 @@ class landerclass:
         for obj in [this.bottom, this.top]: pygame.draw.polygon(screen, obj.color, (obj.vertices))
         show = this.bottom if split == False else this.top; Text = font.render("Fuel: " + str(show.fuel), False, (255, 255, 255)); screen.blit(Text, (20, 20))  
     def drawaftercrash(this, num: int, downforce: float, sideforce: float) -> int:
-        pygame.draw.rect(screen, (148, 148, 148), pygame.Rect(0, 760, 800, 800)); pygame.draw.circle(screen, (0, 0, 0), (this.top.vertices[1][0] - 15, 500), 290)
+        pygame.draw.rect(screen, (148, 148, 148), pygame.Rect(0, 760, 2000, 800)); pygame.draw.circle(screen, (0, 0, 0), (this.top.vertices[1][0] - 15, 500), 290)
         if num < 200:
             num += 10
             for obj, value in [(this.bottom, 3), (this.top, 5)]: pygame.draw.polygon(screen, obj.color, (obj.vertices - num * obj.vectors[5][1] / value))
